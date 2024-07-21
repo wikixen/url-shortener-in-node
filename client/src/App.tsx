@@ -1,27 +1,41 @@
-import { SyntheticEvent } from 'react'
+import { SyntheticEvent, useState } from 'react'
 import './App.css'
 
 function App() {
+  const [formData, setFormData] = useState<string | null>();
+  let url:Response;
 
-  const handleSubmit = (e: SyntheticEvent) => {
+  const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-    const urlEntered: any = e.currentTarget
+    
+    // const enteredURL = new FormData(formData);
+    url = await fetch('/v4/shorten', { body: formData })
 
-    const formData = new FormData(urlEntered)
-
-    fetch('/api/url/shorten', {method: urlEntered.method, body: formData })
+    return (
+      <section className='short-url'>
+        {url}
+      </section>
+    )
   }
+  const handleChange = (e: SyntheticEvent) => {
+    const value = (e.target as HTMLInputElement).value;
+    setFormData(value);
+  }
+  
+
+  
 
   return (
     <main>
-      <h1 className="title">Benny's URL Shortener</h1>
+      <h1 className="title">URL Shortener</h1>
       <form method='post' onSubmit={handleSubmit}>
         <label>Enter URL Below:</label>
-        <input name='url' />
-        <input type="submit" value="Create My Short URL" />
+        <input name='url' onChange={handleChange} />
+        <input type="submit" value="Shorten URL"/>
       </form>
+
     </main>
   )
 }
 
-export default App
+export default App;
