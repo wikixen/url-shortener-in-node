@@ -1,20 +1,27 @@
 import express from 'express';
+import cors from 'cors';
 import 'dotenv/config';
-import { connectDB } from './config/dbconfig.js';
-import { reRouter } from './routes/reRoute.js';
-import { urlRouter } from './routes/urlRoute.js';
+import { connectDB } from './config/dbconfig';
+import { router } from './routes/shortUrl';
+// import { reRouter } from './routes/reRoute';
 
-const app = express();
-
-// Connect to DB
 connectDB();
 
+const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(
+    cors({
+        origin: process.env.DOMAIN,
+        credentials: true,
+        // methods: ['GET', 'POST'],
+        // allowedHeaders: ['Content-Type']
+    })
+);
 
 // Routes
-app.use('/', reRouter);
-app.use('/api/url', urlRouter);
+app.use('/api', router);
+// app.use('/', reRouter);
 
 const PORT = process.env.DEV_PORT;
 

@@ -1,29 +1,37 @@
-import { SyntheticEvent, useState } from 'react'
+import { SyntheticEvent, useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
   const [formData, setFormData] = useState<string | null>();
-  let url:Response;
+  const url:string = 'http://localhost:5000/api/url/shorten';
 
-  const handleSubmit = async (e: SyntheticEvent) => {
+  const fetchData = async () => {
+    const options: any = {
+      method: 'POST',
+      header: {
+        'Content-Type': 'application/json',
+        'Authorization':'',
+      },
+      body: JSON.stringify({
+        'longURL':formData
+      })
+    };
+  
+    fetch(url, options)
+      .then(response => response.json())
+      .then((data) => {
+        console.log(data);
+      })
+  }
+
+  const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault()
-    
-    // const enteredURL = new FormData(formData);
-    url = await fetch('/v4/shorten', { body: formData })
-
-    return (
-      <section className='short-url'>
-        {url}
-      </section>
-    )
+    fetchData();
   }
   const handleChange = (e: SyntheticEvent) => {
     const value = (e.target as HTMLInputElement).value;
     setFormData(value);
   }
-  
-
-  
 
   return (
     <main>
