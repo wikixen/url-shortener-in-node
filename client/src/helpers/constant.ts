@@ -1,0 +1,1 @@
+export const serverURL = import.meta.env.SERVER_PORT || "http://localhost:5000/api"
