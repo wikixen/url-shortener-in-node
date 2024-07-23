@@ -12,7 +12,7 @@ export const createUrl = async (req: express.Request, res: express.Response) => 
         } else {
             const shortUrl = await urlModel.create({ originalUrl });
             res.status(201).json({
-                message: `${shortUrl} has been added to DB as a shortUrl`,
+                message: `Url has been added to DB as a shortUrl`,
             });
         }
     } catch (error) {
@@ -27,7 +27,7 @@ export const getAllUrl = async (req: express.Request, res: express.Response) => 
         const shortUrls = await urlModel.find();
         if (shortUrls.length < 0) {
             res.status(404).json({
-                message: `${shortUrls} doesn't exist in DB`,
+                message: `Url doesn't exist in DB`,
             });
         } else {
             res.status(200).json({
@@ -46,7 +46,7 @@ export const getUrl = async (req: express.Request, res: express.Response) => {
     try {
         if (!shortUrl) {
             res.status(404).json({
-                message: `${shortUrl} doesn't exist`
+                message: `Url doesn't exist`
             })
         }
         else {
