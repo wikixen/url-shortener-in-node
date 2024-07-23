@@ -3,8 +3,8 @@ import urlModel from '../models/url';
 
 export const createUrl = async (req: express.Request, res: express.Response) => {
     try {
-        const { originalUrl } = req.body;
-        const urlFound = await urlModel.find(originalUrl);
+        const { originalUrl }  = req.body;
+        const urlFound = await urlModel.find({ originalUrl })!;
 
         if (urlFound.length > 0) {
             res.status(409);
@@ -42,8 +42,35 @@ export const getAllUrl = async (req: express.Request, res: express.Response) => 
     }
 }
 export const getUrl = async (req: express.Request, res: express.Response) => {
-    
+    const shortUrl = await urlModel.findOne({ shortURL: req.params.id });
+    try {
+        if (!shortUrl) {
+            res.status(404).json({
+                message: `${shortUrl} doesn't exist`
+            })
+        }
+        else {
+            res.redirect(`${shortUrl.originalUrl}`)
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: "Something went wrong",
+            err: error,
+        });
+    }
 }
 export const deleteUrl = async (req: express.Request, res: express.Response) => {
-    
+    const shortUrl = await urlModel.findByIdAndDelete({ _id: req.params.id });
+    try {
+        if (shortUrl) {
+            res.status(204).json({
+                message: `Url deleted`
+            })
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: "Something went wrong",
+            err: error,
+        });
+    }
 }
