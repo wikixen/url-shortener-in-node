@@ -1,8 +1,13 @@
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent, FormEvent, FunctionComponent, useState } from 'react'
 import axios from 'axios';
 import { serverURL } from '../helpers/constant';
 
-export default function Form() {
+interface DataProps {
+  updateReloadState: () => void;
+}
+
+export const Form: FunctionComponent<DataProps> = (props) => {
+  const { updateReloadState } = props;
   const [enteredUrl, setEnteredUrl] = useState<string>();
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -16,7 +21,8 @@ export default function Form() {
       await axios.post(`${serverURL}/shorten`, {
         originalUrl: enteredUrl
       })
-      setEnteredUrl("")
+      setEnteredUrl("");
+      updateReloadState();
     } catch (error) {
       console.log(error)
     }
@@ -24,7 +30,6 @@ export default function Form() {
 
   return (
     <section className='form-section'>
-      <h2 className="title">URL Shortener</h2>
       <form method='post' onSubmit={onSubmit}>
         <label>Enter URL Below:</label>
         <input name='url' type='text' required

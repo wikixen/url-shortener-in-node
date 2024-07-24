@@ -24,7 +24,7 @@ export const createUrl = async (req: express.Request, res: express.Response) => 
 }
 export const getAllUrl = async (req: express.Request, res: express.Response) => {
     try {
-        const shortUrls = await urlModel.find();
+        const shortUrls = await urlModel.find().sort({createdAt: -1});
         if (shortUrls.length < 0) {
             res.status(404).json({
                 message: `Url doesn't exist in DB`,

@@ -1,19 +1,14 @@
 import './App.css'
-import Navbar from './components/navbar'
-import Footer from './components/footer'
-import Form from './components/form'
-import Output from './components/output'
+import Output from './components/data'
 
 export default function App() {
 
   return (
     <>
-      <Navbar />
+      <h1 className="title">URL Shortener</h1>
       <main>
-        <Form />
         <Output />
       </main>
-      <Footer />
     </>
   )
 }
